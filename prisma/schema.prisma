@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model GalleryImage {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String
+  category    String
+  createdAt   DateTime @default(now())
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  subject   String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model PressRelease {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  date      DateTime
+  author    String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+}
+
+model ProgramTimeline {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  date        DateTime
+  status      String
+  icon        String
+}
+
+model Testimonial {
+  id        Int      @id @default(autoincrement())
+  name      String
+  role      String
+  content   String
+  avatarUrl String?
+  rating    Int
+  createdAt DateTime @default(now())
+}
