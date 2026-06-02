@@ -96,6 +96,7 @@ Program CSR **"MAS Arya Peduli"** berfokus pada pengembangan **kepemimpinan dan 
 | Charts | Recharts | 2.14.1 |
 | Database | SQLite via Prisma | 5.22.0 |
 | Icons | Lucide React | 0.460.0 |
+| i18n | Context API | — |
 
 ---
 
@@ -113,6 +114,7 @@ Program CSR **"MAS Arya Peduli"** berfokus pada pengembangan **kepemimpinan dan 
 - **Dark/Light Mode** — Toggle tema gelap/terang
 - **Pencarian** — Shortcut `Ctrl+K` untuk pencarian cepat
 - **Responsive** — Tampilan optimal di desktop, tablet, dan mobile
+- **Bahasa Indonesia / English** — Toggle bahasa dengan Context API i18n
 - **Download Laporan** — Export laporan penelitian dalam format TXT
 - **Share Buttons** — Bagikan ke Twitter, Facebook, LinkedIn
 
@@ -224,38 +226,49 @@ vercel --prod
 ## Struktur Proyek
 
 ```
-csr-research-website/
 ├── prisma/
 │   ├── schema.prisma          # Schema database (5 model)
 │   └── dev.db                 # SQLite database
+├── public/
+│   └── images/                # Gambar publik (logo, kegiatan, event)
+├── scripts/
+│   └── convert-images.js      # Konversi gambar ke WebP
 ├── src/
 │   ├── app/
-│   │   ├── layout.tsx         # Root layout (Navbar, Footer, Theme)
+│   │   ├── globals.css        # Global styles
+│   │   ├── layout.tsx         # Root layout (Navbar, Footer, Theme, i18n)
 │   │   ├── page.tsx           # Halaman utama
 │   │   ├── about/             # Profil perusahaan
-│   │   ├── program/           # Detail CSR program
-│   │   ├── research/          # Hasil penelitian + grafik
-│   │   ├── impact/            # Dashboard dampak
+│   │   ├── contact/           # Kontak + maps
 │   │   ├── gallery/           # Galeri foto
+│   │   ├── impact/            # Dashboard dampak
 │   │   ├── press-release/     # Press release
+│   │   ├── program/           # Detail CSR program
 │   │   ├── references/        # Daftar pustaka
-│   │   └── contact/           # Kontak + maps
+│   │   └── research/          # Hasil penelitian + grafik
 │   ├── components/
 │   │   ├── home/              # Komponen halaman utama
-│   │   ├── layout/            # Navbar, Footer, dll
-│   │   ├── shared/            # Komponen bersama
+│   │   ├── layout/            # Navbar, Footer, ScrollToTop
+│   │   ├── shared/            # AnimatedSection, SearchDialog, dll
 │   │   └── ui/                # shadcn/ui components
+│   ├── contexts/
+│   │   └── LanguageContext.tsx # Context i18n (ID/EN)
 │   ├── data/
 │   │   └── research-data.ts   # Data penelitian statis
-│   └── lib/
-│       ├── prisma.ts          # Prisma client
-│       ├── seed.ts            # Seed database
-│       └── utils.ts           # Utility functions
-├── public/                    # Static assets
+│   ├── hooks/                 # Custom hooks
+│   ├── lib/
+│   │   ├── prisma.ts          # Prisma client
+│   │   ├── seed.ts            # Seed database
+│   │   └── utils.ts           # Utility functions
+│   └── locales/
+│       ├── en.ts              # English translations
+│       └── id.ts              # Bahasa Indonesia translations
+├── .env                       # Environment variables
+├── components.json            # shadcn/ui config
+├── next.config.ts
 ├── package.json
 ├── tailwind.config.ts
-├── tsconfig.json
-└── next.config.ts
+└── tsconfig.json
 ```
 
 ---
