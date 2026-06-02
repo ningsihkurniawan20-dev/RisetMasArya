@@ -1,30 +1,31 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ScrollToTop from "@/components/layout/ScrollToTop";
 
 export const metadata: Metadata = {
   title: {
-    default: "MAS Arya Peduli - CSR & Public Relations Research",
-    template: "%s | MAS Arya Peduli",
+    default: "PT MAS Arya Indonesia",
+    template: "%s | PT MAS Arya Indonesia",
   },
   description:
-    "Penelitian tentang strategi hubungan masyarakat PT MAS Arya Indonesia melalui program CSR 'MAS Arya Peduli' dalam membangun hubungan dengan masyarakat lokal.",
+    "PT MAS Arya Indonesia — bagian dari MAS Holdings, eksportir pakaian terbesar di Asia Selatan.",
   keywords: [
-    "CSR",
-    "Public Relations",
     "MAS Arya Indonesia",
-    "Penelitian",
-    "Tanggung Jawab Sosial Perusahaan",
+    "MAS Holdings",
+    "Garment",
     "Kendal",
+    "Boja",
+    "Apparel Manufacturer",
   ],
-  authors: [{ name: "Tim Riset MAS Arya" }],
+  authors: [{ name: "PT MAS Arya Indonesia" }],
   openGraph: {
-    title: "MAS Arya Peduli - CSR & Public Relations Research",
+    title: "PT MAS Arya Indonesia",
     description:
-      "Penelitian strategi hubungan masyarakat PT MAS Arya Indonesia melalui program CSR",
+      "PT MAS Arya Indonesia — bagian dari MAS Holdings, eksportir pakaian terbesar di Asia Selatan.",
     type: "website",
     locale: "id_ID",
   },
@@ -43,10 +44,12 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col">
         <ThemeProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <ScrollToTop />
+          <LanguageProvider>
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <ScrollToTop />
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

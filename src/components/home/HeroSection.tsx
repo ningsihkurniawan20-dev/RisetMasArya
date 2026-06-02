@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, useMotionValue, useSpring } from "fram
 import Link from "next/link";
 import { ArrowRight, BookOpen, Camera, Users, TrendingUp, Award, Sparkles, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/contexts/LanguageContext";
 
 const floatingShapes = [
   { size: 60, x: "15%", y: "20%", delay: 0, duration: 6, color: "rgba(255,255,255,0.03)" },
@@ -16,7 +17,7 @@ const floatingShapes = [
   { size: 70, x: "50%", y: "85%", delay: 1.2, duration: 7.5, color: "rgba(255,255,255,0.02)" },
 ];
 
-const badgeText = "CSR & Public Relations Research";
+const badgeText = "PT MAS Arya Indonesia";
 
 function AnimatedCounter({ to, suffix = "" }: { to: number; suffix?: string }) {
   const count = useMotionValue(0);
@@ -57,11 +58,12 @@ export default function HeroSection() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const shapeY = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
+  const { t, locale } = useTranslation();
   const [badgeIndex, setBadgeIndex] = useState(0);
   const badges = [
-    "CSR & Public Relations Research",
-    "Kajian Akademik Terpadu",
-    "Dampak Sosial Berkelanjutan",
+    "PT MAS Arya Indonesia",
+    "MAS Holdings — Sri Lanka",
+    "Apparel Manufacturer Kelas Dunia",
   ];
 
   useEffect(() => {
@@ -76,13 +78,20 @@ export default function HeroSection() {
       ref={sectionRef}
       className="relative min-h-screen flex items-center overflow-hidden"
     >
-      <motion.div
-        className="absolute inset-0"
-        style={{ y: shapeY }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-[#3A0808] via-[#5C1010] to-[#0D0D0D]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.08),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(0,0,0,0.3),transparent_60%)]" />
+        <motion.div
+          className="absolute inset-0"
+          style={{ y: shapeY }}
+        >
+          <div className="absolute inset-0">
+            <img
+              src="/images/event-aryaphoria.webp"
+              alt=""
+              className="w-full h-full object-cover opacity-40"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#3A0808]/95 via-[#5C1010]/90 to-[#0D0D0D]/95" />
+          </div>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.08),transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(0,0,0,0.3),transparent_60%)]" />
 
         <div
           className="absolute inset-0 opacity-[0.04] mix-blend-overlay"
@@ -150,7 +159,7 @@ export default function HeroSection() {
                   {badges[badgeIndex]}
                 </motion.span>
                 <span className="w-1 h-1 rounded-full bg-white/30" />
-                <span className="text-white/50 text-xs">#Research</span>
+                <span className="text-white/50 text-xs">#Manufacturing</span>
               </div>
             </motion.div>
 
@@ -160,13 +169,13 @@ export default function HeroSection() {
               transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.4, 0.25, 1] }}
             >
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight">
-                <span className="block">MAS Arya Peduli:</span>
+                <span className="block">{locale === "id" ? "Menjadi" : "Becoming"}</span>
                 <span className="block mt-2 text-white/90">
-                  Membangun Generasi{" "}
+                  {locale === "id" ? "Changemakers yang" : "Changemakers Who"}{" "}
                 </span>
                 <span className="relative inline-block mt-2">
                   <span className="bg-gradient-to-r from-amber-300/90 via-amber-100 to-amber-300/90 bg-clip-text text-transparent">
-                    Changemakers
+                    {locale === "id" ? "Memberdayakan Impian" : "Empower Dreams"}
                   </span>
                   <motion.span
                     className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-amber-500/30 via-amber-300/50 to-amber-500/30 rounded-full"
@@ -183,9 +192,9 @@ export default function HeroSection() {
               transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
               className="text-lg sm:text-xl text-white/70 max-w-xl mt-6 leading-relaxed"
             >
-              Penelitian tentang strategi hubungan masyarakat PT MAS Arya Indonesia
-              melalui program Corporate Social Responsibility dalam membangun
-              hubungan harmonis dengan masyarakat lokal.
+              {locale === "id"
+                ? "Kami adalah bagian dari MAS Holdings — produsen pakaian global terkemuka yang memproduksi merek kelas dunia seperti Nike, Lululemon, Victoria's Secret, Calvin Klein, dan Patagonia."
+                : "We are part of MAS Holdings — a leading global apparel manufacturer producing world-class brands such as Nike, Lululemon, Victoria's Secret, Calvin Klein, and Patagonia."}
             </motion.p>
 
             <motion.div
@@ -194,7 +203,7 @@ export default function HeroSection() {
               transition={{ duration: 0.7, delay: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
               className="flex flex-wrap gap-4 mt-10"
             >
-              <Link href="/research">
+              <Link href="/about">
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
                   <Button
                     size="lg"
@@ -202,7 +211,7 @@ export default function HeroSection() {
                   >
                     <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                     <BookOpen className="h-5 w-5 relative z-10" />
-                    <span className="relative z-10">Lihat Penelitian</span>
+                    <span className="relative z-10">{locale === "id" ? "Profil Perusahaan" : "Company Profile"}</span>
                     <ArrowRight className="h-4 w-4 relative z-10 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </motion.div>
@@ -216,7 +225,7 @@ export default function HeroSection() {
                   >
                     <span className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     <Camera className="h-5 w-5 relative z-10" />
-                    <span className="relative z-10">Dokumentasi Kegiatan</span>
+                    <span className="relative z-10">{locale === "id" ? "Dokumentasi Kegiatan" : "Activity Gallery"}</span>
                   </Button>
                 </motion.div>
               </Link>
@@ -229,9 +238,9 @@ export default function HeroSection() {
               className="flex items-center gap-6 mt-12 pt-8 border-t border-white/10"
             >
               {[
-                { icon: Users, value: 60, suffix: "+", label: "Siswa" },
-                { icon: TrendingUp, value: 92, suffix: "%", label: "Kepuasan" },
-                { icon: Award, value: 12, suffix: "", label: "Sesi" },
+                { icon: Users, value: 3500, suffix: "+", label: locale === "id" ? "Karyawan" : "Employees" },
+                { icon: TrendingUp, value: 5, suffix: "", label: locale === "id" ? "Merek Global" : "Global Brands" },
+                { icon: Award, value: 2, suffix: "", label: locale === "id" ? "Lokasi Pabrik" : "Factory Locations" },
               ].map((stat, i) => (
                 <div key={i} className="flex items-center gap-2.5">
                   <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center backdrop-blur-sm">
@@ -268,12 +277,11 @@ export default function HeroSection() {
                     className="w-28 h-28 rounded-[20px] bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center mx-auto mb-6 border border-white/10 backdrop-blur-sm"
                   >
                     <span className="text-5xl font-black text-white/90 tracking-tight">
-                      CSR
+                      MA
                     </span>
                   </motion.div>
                   <p className="text-white/60 text-sm leading-relaxed max-w-[220px] mx-auto">
-                    &ldquo;Mencetak generasi muda yang berjiwa pemimpin,
-                    berpikir kritis, memiliki empati, dan menjadi agen perubahan&rdquo;
+                    &ldquo;{locale === "id" ? "Changemakers yang Memberdayakan Impian" : "Changemakers Who Empower Dreams"}&rdquo;
                   </p>
                   <div className="mt-6 flex justify-center gap-1">
                     {[1, 2, 3].map((i) => (
@@ -294,9 +302,9 @@ export default function HeroSection() {
                 <div className="absolute inset-0 bg-gradient-to-tl from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative z-10">
                   <p className="text-white font-black text-3xl">
-                    60+
+                    3500+
                   </p>
-                  <p className="text-white/50 text-sm mt-1">Siswa Terlibat Aktif</p>
+                  <p className="text-white/50 text-sm mt-1">{locale === "id" ? "Karyawan" : "Employees"}</p>
                   <div className="mt-3 flex -space-x-2">
                     {[1, 2, 3, 4].map((i) => (
                       <motion.div
@@ -323,9 +331,9 @@ export default function HeroSection() {
                 transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                 className="absolute -top-4 -left-4 w-28 h-28 rounded-2xl bg-gradient-to-br from-amber-500/10 to-white/5 backdrop-blur-2xl border border-white/10 p-4 shadow-xl"
               >
-                <p className="text-amber-300/80 font-bold text-lg">92%</p>
+                <p className="text-amber-300/80 font-bold text-lg">1987</p>
                 <p className="text-white/50 text-[10px] leading-tight mt-1">
-                  Tingkat Kepuasan Program
+                  {locale === "id" ? "Didirikan" : "Founded"}
                 </p>
               </motion.div>
             </div>

@@ -4,22 +4,18 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { Menu, X, Sun, Moon, Search, ChevronDown, Sparkles } from "lucide-react";
+import { Menu, X, Moon, Sun, Globe, Home, Building2, FileText, Camera, BookOpen, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { useTheme } from "./ThemeProvider";
-import { SearchDialog } from "@/components/shared/SearchDialog";
+import { useTranslation } from "@/contexts/LanguageContext";
+import { useTheme } from "@/components/layout/ThemeProvider";
 
 const navLinks = [
-  { href: "/", label: "Beranda" },
-  { href: "/about", label: "Tentang" },
-  { href: "/program", label: "Program CSR" },
-  { href: "/research", label: "Penelitian" },
-  { href: "/press-release", label: "Press Release" },
-  { href: "/gallery", label: "Galeri" },
-  { href: "/impact", label: "Dampak" },
-  { href: "/references", label: "Referensi" },
-  { href: "/contact", label: "Kontak" },
+  { href: "/", key: "nav.home", icon: Home },
+  { href: "/about", key: "nav.profile", icon: Building2 },
+  { href: "/press-release", key: "nav.pressRelease", icon: FileText },
+  { href: "/gallery", key: "nav.gallery", icon: Camera },
+  { href: "/references", key: "nav.references", icon: BookOpen },
+  { href: "/contact", key: "nav.contact", icon: Mail },
 ];
 
 const containerVariants = {
@@ -43,16 +39,13 @@ const itemVariants = {
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const pathname = usePathname();
-  const { theme, toggleTheme } = useTheme();
   const { scrollY } = useScroll();
+  const { t, locale, setLocale } = useTranslation();
+  const { theme, toggleTheme } = useTheme();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 20);
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    setScrollProgress(docHeight > 0 ? (latest / docHeight) * 100 : 0);
   });
 
   useEffect(() => {
@@ -76,21 +69,20 @@ export default function Navbar() {
             <Link href="/" className="flex items-center gap-3 group relative">
               <motion.div
                 whileHover={{ scale: 1.05, rotate: -3 }}
-                className="w-11 h-11 rounded-xl bg-gradient-to-br from-red-800 to-[#3A0808] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-black/20 group-hover:shadow-black/30 transition-shadow relative overflow-hidden"
+                className="w-11 h-11 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-black/20 group-hover:shadow-black/30 transition-shadow relative overflow-hidden"
               >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.2),transparent_70%)]" />
-                <span className="relative z-10">MA</span>
+                <img src="/images/logo-mas-arya.webp" alt="MAS Arya" className="w-8 h-8 object-contain" />
               </motion.div>
-              <div className="hidden sm:block">
+              <div className="block">
                 <motion.span
-                  className="text-lg font-bold text-gray-900 dark:text-white block leading-tight"
+                  className="text-sm sm:text-lg font-bold text-gray-900 dark:text-white block leading-tight"
                   layout
                 >
-                  MAS Arya
+                  {t("company.shortName")}
                   <span className="text-red-700">.</span>
                 </motion.span>
-                <span className="text-[10px] text-gray-500 dark:text-gray-400 tracking-widest uppercase font-medium">
-                  Research &bull; CSR &bull; Impact
+                <span className="hidden sm:block text-[10px] text-gray-500 dark:text-gray-400 tracking-widest uppercase font-medium">
+                  {t("company.tagline")}
                 </span>
               </div>
             </Link>
@@ -109,7 +101,7 @@ export default function Navbar() {
                         : "text-gray-600/90 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                     )}
                   >
-                    <span className="relative z-10">{link.label}</span>
+                    <span className="relative z-10">{t(link.key)}</span>
                     {isActive && (
                       <motion.div
                         layoutId="nav-indicator"
@@ -127,48 +119,21 @@ export default function Navbar() {
 
             <div className="flex items-center gap-1.5">
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setSearchOpen(true)}
-                className="relative w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors group"
-                aria-label="Search"
+                whileTap={{ scale: 0.9 }}
+                onClick={toggleTheme}
+                className="hidden lg:flex w-9 h-9 rounded-xl items-center justify-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                aria-label={t("nav.theme")}
               >
-                <Search className="h-4.5 w-4.5" />
-                <kbd className="absolute -bottom-0.5 -right-0.5 hidden sm:inline-flex text-[9px] px-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-400 font-mono leading-none opacity-0 group-hover:opacity-100 transition-opacity">
-                  ⌘K
-                </kbd>
+                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </motion.button>
 
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={toggleTheme}
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                aria-label="Toggle theme"
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setLocale(locale === "id" ? "en" : "id")}
+                className="hidden lg:flex w-9 h-9 rounded-xl items-center justify-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-xs font-bold uppercase"
+                aria-label={t("nav.language")}
               >
-                <AnimatePresence mode="wait">
-                  {theme === "dark" ? (
-                    <motion.span
-                      key="sun"
-                      initial={{ rotate: -90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 90, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <Sun className="h-4.5 w-4.5" />
-                    </motion.span>
-                  ) : (
-                    <motion.span
-                      key="moon"
-                      initial={{ rotate: 90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: -90, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <Moon className="h-4.5 w-4.5" />
-                    </motion.span>
-                  )}
-                </AnimatePresence>
+                <Globe className="h-4 w-4" />
               </motion.button>
 
               <motion.button
@@ -187,58 +152,93 @@ export default function Navbar() {
           </div>
         </nav>
 
-        <motion.div
-          className="h-[1.5px] bg-gradient-to-r from-red-800/60 via-red-600/40 to-red-800/60 origin-left"
-          style={{ scaleX: scrollProgress / 100 }}
-        />
-
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="lg:hidden border-t border-gray-100 dark:border-gray-800 bg-white/95 backdrop-blur-xl dark:bg-gray-950/95 overflow-hidden"
+              initial={{ opacity: 0, y: -10, scaleY: 0.95 }}
+              animate={{ opacity: 1, y: 0, scaleY: 1 }}
+              exit={{ opacity: 0, y: -10, scaleY: 0.95 }}
+              transition={{ duration: 0.25, ease: [0.25, 0.4, 0.25, 1] }}
+              className="lg:hidden border-t border-gray-100 dark:border-gray-800 bg-white/95 backdrop-blur-xl dark:bg-gray-950/95 overflow-hidden origin-top"
             >
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-                exit="exit"
-                className="max-w-7xl mx-auto px-4 py-4 space-y-0.5"
-              >
-                {navLinks.map((link) => {
-                  const isActive = pathname === link.href;
-                  return (
-                    <motion.div key={link.href} variants={itemVariants}>
-                      <Link
-                        href={link.href}
-                        className={cn(
-                          "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all",
-                          isActive
-                            ? "bg-gradient-to-r from-red-50/50 to-transparent text-red-700 dark:from-red-950/30 dark:text-red-400"
-                            : "text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800/50"
-                        )}
-                      >
-                        <span
+              <div className="max-w-7xl mx-auto px-4 py-5">
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="show"
+                  exit="exit"
+                  className="space-y-1"
+                >
+                  {navLinks.map((link) => {
+                    const isActive = pathname === link.href;
+                    const Icon = link.icon;
+                    return (
+                      <motion.div key={link.href} variants={itemVariants}>
+                        <Link
+                          href={link.href}
                           className={cn(
-                            "w-1.5 h-1.5 rounded-full",
-                            isActive ? "bg-red-700/70" : "bg-gray-300 dark:bg-gray-600"
+                            "flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium transition-all duration-200 group relative overflow-hidden",
+                            isActive
+                              ? "text-red-700 dark:text-red-400 bg-red-50/80 dark:bg-red-950/30"
+                              : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50"
                           )}
-                        />
-                        {link.label}
-                      </Link>
-                    </motion.div>
-                  );
-                })}
-              </motion.div>
+                        >
+                          <div className={cn(
+                            "w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 shrink-0",
+                            isActive
+                              ? "bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400"
+                              : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 group-hover:bg-gray-200 dark:group-hover:bg-gray-700"
+                          )}>
+                            <Icon className="h-4 w-4" />
+                          </div>
+                          <div className="flex-1">
+                            <span className="font-medium">{t(link.key)}</span>
+                          </div>
+                          {isActive && (
+                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-red-600 dark:bg-red-400 rounded-full" />
+                          )}
+                          <div className={cn(
+                            "w-1.5 h-1.5 rounded-full transition-all",
+                            isActive ? "bg-red-600 dark:bg-red-400" : "bg-gray-300 dark:bg-gray-600"
+                          )} />
+                        </Link>
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+
+                <div className="mt-5 pt-5 border-t border-gray-100 dark:border-gray-800">
+                  <div className="flex gap-3">
+                    <button
+                      onClick={toggleTheme}
+                      className="flex-1 flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium bg-gray-50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 border border-gray-200/50 dark:border-gray-700/50"
+                    >
+                      <div className="w-7 h-7 rounded-lg bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm">
+                        {theme === "dark" ? <Sun className="h-3.5 w-3.5 text-amber-500" /> : <Moon className="h-3.5 w-3.5 text-gray-600" />}
+                      </div>
+                      <span>{theme === "dark" ? (locale === "id" ? "Terang" : "Light") : (locale === "id" ? "Gelap" : "Dark")}</span>
+                    </button>
+                    <button
+                      onClick={() => setLocale(locale === "id" ? "en" : "id")}
+                      className="flex-1 flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium bg-gray-50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 border border-gray-200/50 dark:border-gray-700/50"
+                    >
+                      <div className="w-7 h-7 rounded-lg bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm">
+                        <Globe className="h-3.5 w-3.5 text-primary" />
+                      </div>
+                      <span className="font-semibold uppercase">{locale === "id" ? "EN" : "ID"}</span>
+                    </button>
+                  </div>
+                  <div className="mt-3 px-1">
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500 text-center tracking-wider uppercase">
+                      {locale === "id" ? `${t("company.shortName")}. — ${t("company.tagline")}` : `${t("company.shortName")}. — ${t("company.tagline")}`}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
       </header>
-
-      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
     </>
   );
 }
