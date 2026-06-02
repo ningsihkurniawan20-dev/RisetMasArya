@@ -278,8 +278,8 @@ vercel --prod
 Penelitian ini dilakukan oleh:
 
 - **Penulis** — [ningsihkurniawan20-dev](https://github.com/ningsihkurniawan20-dev)
-- **Institusi** — Universitas (sesuaikan)
-- **Tahun** — 2024/2025
+- **Institusi** — Universitas 
+- **Tahun** — 2026
 
 ---
 
