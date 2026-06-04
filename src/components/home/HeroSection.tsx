@@ -133,6 +133,7 @@ export default function HeroSection() {
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white dark:from-gray-950 to-transparent pointer-events-none" />
+      <img src="/images/image-removebg-preview.png" alt="" className="absolute right-10 top-10 h-72 opacity-15 pointer-events-none object-contain z-10" />
 
       <motion.div
         className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-40"

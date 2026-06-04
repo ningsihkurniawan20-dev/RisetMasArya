@@ -38,8 +38,9 @@ const COLORS = ["#C62828", "#1A1A1A", "#D97706", "#7D1414"];
 export default function ResearchPage() {
   return (
     <>
-      <section className="pt-32 pb-16 gradient-hero text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative pt-32 pb-16 gradient-hero text-white overflow-hidden">
+        <img src="/images/image-removebg-preview.png" alt="" className="absolute right-0 top-0 h-64 opacity-15 pointer-events-none object-contain" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection>
             <Badge className="bg-white/20 text-white border-0 mb-4">Hasil Penelitian</Badge>
             <h1 className="text-4xl sm:text-5xl font-bold mb-4">Hasil Penelitian</h1>
